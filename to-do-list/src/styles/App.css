@@ -1,0 +1,30 @@
+.App {
+  width: 100%;
+  height: 100vh;
+  padding-bottom: 50px;
+  overflow: scroll;
+  background-color: #f9f3ee;
+  background-image: url("../branch2.png");
+  background-size: 30%;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position-x: 65rem;
+  background-position-y: -2rem;
+  text-align: center;
+  font-family: "Dancing Script", cursive;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 0.1fr 0.45fr 0.45fr;
+  gap: 1%;
+}
+.App-Header {
+  grid-column: 1/3;
+  font-weight: bolder;
+  font-size: 3rem;
+}
+.App-Header .Big {
+  font-size: 3.5rem;
+}
+.App-Header .Small {
+  font-size: 2.3rem;
+}

@@ -1,0 +1,45 @@
+.TasksContainer {
+  width: 68%;
+  height: 60%;
+  overflow: scroll;
+
+  margin: 20px auto;
+  padding: 50px;
+  border-radius: 10px;
+  transform: skew(-1deg, 0);
+  opacity: 0.85;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.25);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 25px;
+}
+.TasksContainer h1 {
+  font-weight: 700;
+  margin: 0;
+}
+
+.Must {
+  grid-column: 1 / 2;
+  grid-row: 2 / 3;
+  background-color: #f0dedc;
+}
+
+.Should {
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
+  background-color: #d4e5c9;
+}
+
+.Could {
+  grid-column: 1 / 2;
+  grid-row: 3 / 4;
+  background-color: #cdd5e0;
+}
+
+.Would {
+  grid-column: 2 / 3;
+  grid-row: 3 / 4;
+  background-color: #dbcdd5;
+}
