@@ -44,7 +44,7 @@ export default function TasksContainer({ subclass }) {
 
   const addTask = async (newTask) => {
     try {
-      const result = await axios.post(
+      await axios.post(
         `${url}/${page}/createTask`,
         newTask,
         { withCredentials: true },
@@ -57,7 +57,7 @@ export default function TasksContainer({ subclass }) {
 
   const removeTask = async (task) => {
     try {
-      const result = await axios.post(
+      await axios.post(
         `${url}/${page}/deleteTask`,
         task,
         { withCredentials: true },
@@ -71,7 +71,7 @@ export default function TasksContainer({ subclass }) {
   const updateTask = async (data) => {
     console.log(data);
     try {
-      const result = await axios.post(
+      await axios.post(
         `${url}/${page}/updateTask`,
         data,
         { withCredentials: true },
