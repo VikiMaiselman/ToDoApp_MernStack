@@ -4,15 +4,18 @@ import "../styles/TaskForm.css";
 import "../styles/Task.css";
 
 export default function TaskForm({
-  toUpdateTask,
-  action,
-  prevTaskState,
+  isFormToUpdateTask,
+  actionOnFormSubmission,
+  metadataForNewTask,
+  metadataForExistingTask,
   setIsBeingEdited,
 }) {
   const [task, setTask] = useState({
-    taskText: prevTaskState?.taskText || "",
-    uuid: prevTaskState?.uuid || "",
-    isCompleted: prevTaskState?.isCompleted || false,
+    text: metadataForExistingTask?.text || "",
+    id: metadataForExistingTask?.id || "",
+    isCompleted: metadataForExistingTask?.isCompleted || false,
+    subclass: metadataForExistingTask?.subclass || metadataForNewTask.subclass,
+    page: metadataForExistingTask?.page || metadataForNewTask.page,
   });
 
   const handleChange = (event) => {
@@ -23,21 +26,21 @@ export default function TaskForm({
   const handleClick = (event) => {
     event.preventDefault();
 
-    if (!toUpdateTask) {
+    if (!isFormToUpdateTask) {
+      actionOnFormSubmission({ ...task, id: uuidv4() });
       console.log(task);
-      action({ ...task, uuid: uuidv4() });
-      setTask({ taskText: "", uuid: "" });
+      setTask({ ...task, text: "", id: "" });
     }
 
-    if (toUpdateTask) {
-      setTask({ taskText: task.taskText, uuid: task.uuid });
+    if (isFormToUpdateTask) {
+      actionOnFormSubmission({task: task, isCompleted: task.isCompleted});
+      setTask({ text: task.text, id: task.id });
       setIsBeingEdited(false);
-      action(task.uuid, task.taskText);
     }
   };
 
   let btn;
-  if (toUpdateTask) {
+  if (isFormToUpdateTask) {
     btn = (
       <button className="Task-HandlerButton Add" onClick={handleClick}>
         <i class="fa fa-pencil-square-o" aria-hidden="true"></i>Update task
@@ -56,8 +59,8 @@ export default function TaskForm({
         className="TaskForm-Input Input"
         placeholder="Enter your next task..."
         type="text"
-        name="taskText"
-        value={task.taskText}
+        name="text"
+        value={task.text}
         onChange={handleChange}
       />
       {btn}

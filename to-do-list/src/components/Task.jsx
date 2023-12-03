@@ -4,44 +4,40 @@ import "../styles/Task.css";
 
 export default function Task({ task, updateTask, removeTask }) {
   const [isBeingEdited, setIsBeingEdited] = useState(false);
-  const [isCompleted, setIsCompleted] = useState(false);
 
   const handleEdit = () => {
     setIsBeingEdited(true);
   };
 
   const toggleTaskCompleted = () => {
-    setIsCompleted(() => !isCompleted);
-    updateTask(task.uuid, undefined, isCompleted);
+    updateTask({ task: task, isCompleted: !task.isCompleted });
   };
 
   const contents = isBeingEdited ? (
     <TaskForm
-      toUpdateTask={true}
-      action={updateTask}
-      prevTaskState={task}
+      isFormToUpdateTask={true}
+      actionOnFormSubmission={updateTask}
+      metadataForExistingTask={task}
       setIsBeingEdited={setIsBeingEdited}
     />
   ) : (
     <div className="Task">
-      {isCompleted ? (
-        <span
-          style={{ textDecoration: "line-through" }}
-          onClick={toggleTaskCompleted}
-        >
-          {task.taskText}
-        </span>
-      ) : (
-        <span onClick={toggleTaskCompleted}>{task.taskText}</span>
-      )}
-      {/* <span onClick={toggleTaskCompleted}>{task.taskText}</span> */}
+      <span
+        style={task.isCompleted ? { textDecoration: "line-through" } : null}
+        onClick={toggleTaskCompleted}
+      >
+        {task.text}
+      </span>
       <div className="Task-handlerButtons">
-        <button className="Task-HandlerButton Edit " onClick={handleEdit}>
+        <button
+          className="Task-HandlerButton Edit"
+          onClick={() => handleEdit()}
+        >
           <i class="fa fa-pencil" aria-hidden="true"></i> Edit
         </button>
         <button
           className="Task-HandlerButton Delete"
-          onClick={() => removeTask(task.uuid)}
+          onClick={() => removeTask(task)}
         >
           <i class="fa fa-trash-o" aria-hidden="true"></i> Delete
         </button>

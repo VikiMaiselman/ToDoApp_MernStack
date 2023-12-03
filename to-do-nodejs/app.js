@@ -52,7 +52,6 @@ async function initializeDatabase() {
     id: {
       type: String,
       required: true,
-      unique: true,
     },
   });
 
@@ -98,17 +97,17 @@ app.get("/", async (req, res) => {
 });
 
 app.get("/:pagename", async (req, res) => {
-  const pageName = req.params.pagename;
+  const pageName =
+    req.params.pagename[0].toUpperCase() +
+    req.params.pagename.slice(1).toLowerCase();
 
   try {
     let foundAlreadyExistingList = await TasksList.find({ page: pageName });
-    // console.log("existing", foundAlreadyExistingList);
     if (foundAlreadyExistingList.length !== 0)
       return res.json({ result: foundAlreadyExistingList });
 
     if (foundAlreadyExistingList.length === 0) {
-      //   console.log("triggered", req.params.pagename);
-      for (let sublist of ["Must", "Should", "Could", "Would"]) {
+      for (let sublist of possibleSublists) {
         const tasksList = new TasksList({
           page: pageName,
           name: sublist,
@@ -129,10 +128,7 @@ app.get("/:pagename", async (req, res) => {
   }
 });
 
-// app.get("/", async (req, res) => {});
-// app.get("/", async (req, res) => {});
-
-app.post("/createTask", async (req, res) => {
+app.post("/:page/createTask", async (req, res) => {
   try {
     const task = req.body;
     const newTask = {
@@ -155,7 +151,7 @@ app.post("/createTask", async (req, res) => {
   }
 });
 
-app.post("/updateTask", async (req, res) => {
+app.post("/:page/updateTask", async (req, res) => {
   try {
     const task = req.body.task;
     const isCompleted = req.body.isCompleted;
@@ -177,7 +173,7 @@ app.post("/updateTask", async (req, res) => {
   }
 });
 
-app.post("/deleteTask", async (req, res) => {
+app.post("/:page/deleteTask", async (req, res) => {
   try {
     const task = req.body;
 
