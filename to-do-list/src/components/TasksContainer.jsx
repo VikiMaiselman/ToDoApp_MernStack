@@ -9,7 +9,7 @@ const headers = {
   "Access-Control-Allow-Origin": "http://localhost:3000",
 };
 
-export default function TasksContainer({ subclass }) {
+export default function TasksContainer({ subclass, errorHandler, error }) {
   const [tasks, setTasks] = useState([]);
 
   const pathname = window.location.pathname;
@@ -30,7 +30,10 @@ export default function TasksContainer({ subclass }) {
       setTasks(() => sublist.tasks);
     } catch (error) {
       console.error(error);
-      // err handling
+      errorHandler({
+        hasError: true,
+        errMsg: error.response.data.result,
+      });
     }
   };
 
@@ -50,7 +53,12 @@ export default function TasksContainer({ subclass }) {
         { withCredentials: true },
         headers
       );
-    } catch (error) {}
+    } catch (error) {
+      errorHandler({
+        hasError: true,
+        errMsg: error.response.data.result,
+      });
+    }
 
     fetchData();
   };
@@ -63,13 +71,17 @@ export default function TasksContainer({ subclass }) {
         { withCredentials: true },
         headers
       );
-    } catch (error) {}
+    } catch (error) {
+      errorHandler({
+        hasError: true,
+        errMsg: error.response.data.result,
+      });
+    }
 
     fetchData();
   };
 
   const updateTask = async (data) => {
-    console.log(data);
     try {
       await axios.post(
         `${url}/${page}/updateTask`,
@@ -77,7 +89,12 @@ export default function TasksContainer({ subclass }) {
         { withCredentials: true },
         headers
       );
-    } catch (error) {}
+    } catch (error) {
+      errorHandler({
+        hasError: true,
+        errMsg: error.response.data.result,
+      });
+    }
 
     fetchData();
   };

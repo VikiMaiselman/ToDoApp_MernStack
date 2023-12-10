@@ -1,9 +1,18 @@
+import React, { useState } from "react";
 import TasksContainer from "./TasksContainer";
+import ErrorPage from "./ErrorPage";
 import "../styles/App.css";
 import "../styles/TasksContainer.css";
 
 function App() {
-  return (
+  const [error, setError] = useState({
+    hasError: false,
+    errMsg: "",
+  });
+
+  const toReturn = error.hasError ? (
+    <ErrorPage errMsg={error.errMsg} />
+  ) : (
     <div className="App">
       <h1 className="App-Header">
         <i class="fa fa-list-ul" aria-hidden="true"></i>
@@ -13,12 +22,14 @@ function App() {
         <span className="Big">S</span>
         <span className="Small">T</span>
       </h1>
-      <TasksContainer subclass="Must" />
-      <TasksContainer subclass="Should" />
-      <TasksContainer subclass="Could" />
-      <TasksContainer subclass="Would" />
+      <TasksContainer subclass="Must" errorHandler={setError} error={error} />
+      <TasksContainer subclass="Should" errorHandler={setError} error={error} />
+      <TasksContainer subclass="Could" errorHandler={setError} error={error} />
+      <TasksContainer subclass="Would" errorHandler={setError} error={error} />
     </div>
   );
+
+  return toReturn;
 }
 
 export default App;

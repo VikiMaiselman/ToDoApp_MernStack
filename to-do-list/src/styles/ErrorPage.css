@@ -1,0 +1,18 @@
+.ErrorPage {
+  width: 100%;
+  height: 95vh;
+  padding-bottom: 50px;
+  overflow: scroll;
+  background-color: #f9f3ee;
+  background-image: url("../technical-works.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  text-align: center;
+  font-family: "Dancing Script", cursive;
+}
+.ErrorPage h1 {
+  font-size: 3rem;
+}
+.ErrorPage h2 {
+  font-size: 2rem;
+}
