@@ -35,7 +35,10 @@ async function initializeDatabase() {
     await mongoose.connect("mongodb://localhost:27017/ToDoApp");
   } catch (error) {
     console.error(error);
-    // handle error appropriately
+    return res.status(400).json({
+      result:
+        "There is an internal server/ database problem. Contact the support. ",
+    });
   }
 
   const TaskSchema = new mongoose.Schema({
@@ -92,7 +95,7 @@ app.get("/", async (req, res) => {
     return res.json({ result: results });
   } catch (error) {
     console.error(error);
-    // handle error appropriately
+    return res.status(400).json({ result: "Could not fetch data. Try again." });
   }
 });
 
@@ -119,35 +122,40 @@ app.get("/:pagename", async (req, res) => {
       foundAlreadyExistingList = await TasksList.find({ page: pageName });
       return res.json({ result: foundAlreadyExistingList });
     }
-
-    results = await TasksList.find({ page: "Today" });
-    return res.json({ result: results });
   } catch (error) {
     console.error(error);
-    // handle error appropriately
+    return res.status(400).json({
+      result: "Could not fetch data. Try again.",
+    });
   }
 });
 
 app.post("/:page/createTask", async (req, res) => {
   try {
     const task = req.body;
+
+    const pageName =
+      task.page[0].toUpperCase() + task.page.slice(1).toLowerCase();
+
     const newTask = {
       text: task.text,
       isCompleted: false,
       subclass: task.subclass,
-      page: task.page,
+      page: pageName,
       id: task.id,
     };
 
     await TasksList.updateOne(
-      { page: task.page, name: task.subclass },
+      { page: pageName, name: task.subclass },
       { $push: { tasks: newTask } }
     );
 
     return res.status(201).json("Successfully created");
   } catch (error) {
     console.error(error);
-    // handle error appropriately
+    return res.status(400).json({
+      result: "Could not add your task. Try again or contact the support.",
+    });
   }
 });
 
@@ -156,8 +164,11 @@ app.post("/:page/updateTask", async (req, res) => {
     const task = req.body.task;
     const isCompleted = req.body.isCompleted;
 
+    const pageName =
+      task.page[0].toUpperCase() + task.page.slice(1).toLowerCase();
+
     await TasksList.findOneAndUpdate(
-      { page: task.page, name: task.subclass, "tasks.id": task.id },
+      { page: pageName, name: task.subclass, "tasks.id": task.id },
       {
         $set: {
           "tasks.$.text": task.text,
@@ -169,7 +180,9 @@ app.post("/:page/updateTask", async (req, res) => {
     return res.status(200).json("Successfully updated the task.");
   } catch (error) {
     console.error(error);
-    // handle error appropriately
+    return res.status(400).json({
+      result: "Could not update your task. Try again or contact the support.",
+    });
   }
 });
 
@@ -177,15 +190,20 @@ app.post("/:page/deleteTask", async (req, res) => {
   try {
     const task = req.body;
 
+    const pageName =
+      task.page[0].toUpperCase() + task.page.slice(1).toLowerCase();
+
     await TasksList.updateOne(
-      { page: task.page, name: task.subclass },
+      { page: pageName, name: task.subclass },
       { $pull: { tasks: { id: task.id } } }
     );
 
     return res.status(200).json("Successfully removed");
   } catch (error) {
     console.error(error);
-    // handle error appropriately
+    return res.status(400).json({
+      result: "Could not remove your task. Try again or contact the support.",
+    });
   }
 });
 
